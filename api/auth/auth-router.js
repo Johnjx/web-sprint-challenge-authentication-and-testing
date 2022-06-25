@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../secrets');
 const { checkUsernameExists,
         checkValidBody,
         validateUsername } = require('./auth-middleware');
@@ -36,8 +38,17 @@ router.post('/register', checkValidBody, checkUsernameExists, async (req, res) =
   */
 });
 
-router.post('/login', checkValidBody, validateUsername, (req, res) => {
-  res.end('implement login, please!');
+router.post('/login', checkValidBody, validateUsername, (req, res, next) => {
+  let { username, password } = req.body;
+  password = password.toString();
+  let userPassword = req.existingUser.password;
+
+  if (bcrypt.compareSync(password, userPassword) == false) {
+    next({ status: 401, message: "invalid credentials" });
+    return;
+  }
+
+  
   /*   
     1- In order to log into an existing account the client must provide `username` and `password`:
       {
@@ -59,5 +70,17 @@ router.post('/login', checkValidBody, validateUsername, (req, res) => {
       the response body should include a string exactly as follows: "invalid credentials".
   */
 });
+
+function generateToken(user) {
+  const payload = {
+    subject: user.id,
+    username: user.username,
+  };
+  const options = {
+    expiresIn: '1d',
+  };
+
+  return jwt.sign(payload, JWT_SECRET, options);
+}
 
 module.exports = router;
