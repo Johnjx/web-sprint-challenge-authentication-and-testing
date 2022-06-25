@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { checkUsernameExists, checkValidBody } = require('./auth-middleware');
+const { checkUsernameExists,
+        checkValidBody,
+        validateUsername } = require('./auth-middleware');
 const Users = require('./auth-model');
 
 router.post('/register', checkValidBody, checkUsernameExists, async (req, res) => {
@@ -34,12 +36,9 @@ router.post('/register', checkValidBody, checkUsernameExists, async (req, res) =
   */
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', checkValidBody, validateUsername, (req, res) => {
   res.end('implement login, please!');
-  /*
-    IMPLEMENT
-    You are welcome to build additional middlewares to help with the endpoint's functionality.
-
+  /*   
     1- In order to log into an existing account the client must provide `username` and `password`:
       {
         "username": "Captain Marvel",

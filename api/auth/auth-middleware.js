@@ -36,9 +36,23 @@ const checkValidBody = async (req, res, next) => {
     password = password.toString();
     req.body = { username, password};
     next();
+}
+
+const validateUsername = async (req, res, next) => {
+  const { username } = req.body;
+  const existingUser = await Users.findBy({ username });
+
+  if (existingUser == null) {
+    next({ status: 401, message: "invalid credentials" });
+    return;
   }
+
+  req.existingUser = existingUser;
+  next();
+}
 
 module.exports = {
   checkUsernameExists,
-  checkValidBody
+  checkValidBody,
+  validateUsername
 }
