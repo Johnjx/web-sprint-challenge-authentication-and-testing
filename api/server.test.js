@@ -92,4 +92,18 @@ describe('HTTP tests', () => {
     expect(res.statusCode).toBe(401);
     expect(res.body.message).toBe("invalid credentials");
   })
+
+  test('proper response on missing token, GET /jokes', async () => {
+    const res = await request(server).get('/api/jokes');
+
+    expect(res.statusCode).toBe(401)
+    expect(res.body.message).toBe("token required");
+  })
+
+  test('proper response for unverified token, GET /jokes', async () => {
+    const res = await request(server).get('/api/jokes').set('Authorization', 'fake');
+
+    expect(res.statusCode).toBe(401)
+    expect(res.body.message).toBe("token invalid");
+  })
 })
