@@ -55,5 +55,41 @@ describe('HTTP tests', () => {
     expect(res.body).toEqual({ message: "Invalid credentials" });
   })
 
-  
+  test('POST /login', async () => {
+    await request(server).post('/api/auth/register').send({
+      username: 'john',
+      password: 1234
+    })
+
+    let res = await request(server).post('/api/auth/login').send({
+      username: 'john',
+      password: 1234
+    })
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('welcome, john');
+  })
+
+  test('invalid POST /login', async () => {
+    let res = await request(server).post('/api/auth/login').send({
+      username: 'bob',
+      password: 12345
+    })
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe("invalid credentials");
+
+    await request(server).post('/api/auth/register').send({
+      username: 'alice',
+      password: 12345
+    })
+
+    res = await request(server).post('/api/auth/login').send({
+      username: 'alice',
+      password: 456
+    })
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body.message).toBe("invalid credentials");
+  })
 })
