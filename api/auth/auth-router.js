@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const { checkUsernameExists } = require('./auth-middleware');
+const { checkUsernameExists, checkValidBody } = require('./auth-middleware');
 
-router.post('/register', checkUsernameExists, (req, res) => {
+router.post('/register', checkValidBody, checkUsernameExists, (req, res) => {
   res.end('implement register, please!');
   /*
     DO NOT EXCEED 2^8 ROUNDS OF HASHING!
