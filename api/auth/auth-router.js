@@ -1,11 +1,14 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const { checkUsernameExists, checkValidBody } = require('./auth-middleware');
+const Users = require('./auth-model');
 
-router.post('/register', checkValidBody, checkUsernameExists, (req, res) => {
+router.post('/register', checkValidBody, checkUsernameExists, async (req, res) => {
   const { username, password } = req.body;
   const hash = bcrypt.hashSync(password, 8);
-  
+  const user = await Users.insert({username, password: hash});
+
+  res.status(201).json(user);
   /*
     DO NOT EXCEED 2^8 ROUNDS OF HASHING!
 
