@@ -13,7 +13,7 @@ const checkUsernameExists = async (req, res, next) => {
 }
 
 const checkValidBody = async (req, res, next) => {
-    const { username, password } = req.body;
+    let { username, password } = req.body;
 
     if (username == null || password == null) {
         next({
@@ -23,6 +23,19 @@ const checkValidBody = async (req, res, next) => {
         return; 
     }
     
+    if (typeof username != 'string' ||
+        username.trim().length == '' ||
+        password.toString().trim().length == '') {
+        next({
+            status: 401,
+            message: "Invalid credentials"
+        });
+        return; 
+    }
+
+    username = username.trim();
+    password = password.toString().trim();
+    req.body = { username, password};
     next();
   }
 
