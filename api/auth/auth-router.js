@@ -48,7 +48,8 @@ router.post('/login', checkValidBody, validateUsername, (req, res, next) => {
     return;
   }
 
-  
+  const token = generateToken(req.existingUser);
+  res.json({ message: `welcome, ${username}`, token});
   /*   
     1- In order to log into an existing account the client must provide `username` and `password`:
       {
