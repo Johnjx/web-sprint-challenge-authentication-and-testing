@@ -1,8 +1,11 @@
 const router = require('express').Router();
+const bcrypt = require('bcryptjs');
 const { checkUsernameExists, checkValidBody } = require('./auth-middleware');
 
 router.post('/register', checkValidBody, checkUsernameExists, (req, res) => {
-  res.end('implement register, please!');
+  const { username, password } = req.body;
+  const hash = bcrypt.hashSync(password, 8);
+  
   /*
     DO NOT EXCEED 2^8 ROUNDS OF HASHING!
 

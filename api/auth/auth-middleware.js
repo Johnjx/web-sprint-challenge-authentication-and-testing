@@ -33,8 +33,7 @@ const checkValidBody = async (req, res, next) => {
         return; 
     }
 
-    username = username.trim();
-    password = password.toString().trim();
+    password = password.toString();
     req.body = { username, password};
     next();
   }
