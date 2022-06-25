@@ -30,4 +30,30 @@ describe('HTTP tests', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual({ api: 'up' });
   })
+
+  test('POST /register', async () => {
+    let res = await request(server).post('/api/auth/register').send({
+      username: 'john',
+      password: 1234
+    })
+    expect(res.statusCode).toBe(201);
+    expect(res.body.id).toBe(1);
+    expect(res.body.username).toBe('john');
+  })
+
+  test('invalid POST /register', async () => {
+    let res = await request(server).post('/api/auth/register').send({
+      username: 'tom',
+    })
+    expect(res.statusCode).toBe(401);
+    expect(res.body.id).not.toBeDefined();
+
+    res = await request(server).post('/api/auth/register').send({
+      username: '  ',
+      password: 12
+    })
+    expect(res.body).toEqual({ message: "Invalid credentials" });
+  })
+
+  
 })
