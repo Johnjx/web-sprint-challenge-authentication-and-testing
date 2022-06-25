@@ -54,6 +54,20 @@ Your finished project must include all of the following requirements (further in
 Be prepared to demonstrate your understanding of this week's concepts by answering questions on the following topics.
 
 1. Differences between using _sessions_ or _JSON Web Tokens_ for authentication.
+
+Sessions are an authentication option in which each user that logs in to a platform is saved to a memory system and a cookie may be issued to transfer data such as the session ID. With sessions, the server can terminate a user's session on demand. On the other hand, JWTs are a lightweight method of authentication based on the platform API being able to verify the authenticity of each token it receives. With JWTs, the client has more responsibility in persisting their authentication. In either case, they are both attempts at persisting user sessions because HTTP is stateless.
+
+In terms of session memory stores, they can be a simple in-memory object stored in your server-side code or a complete server/database dedicated to that memory. JWTs can remove the need for multiple servers on a project.
+ 
+
 2. What does `bcryptjs` do to help us store passwords in a secure manner?
+
+Bcryptjs gives us access to a hashing function that we can use to create a secure representation of a user's password, as a complex string, before it is stored in the database. Given the same inputs, the function will always produce the same hash. The function uses salt by default further enhancing the strength of the password as well as eliminating 2 users sharing the same hash. It is also possible to set the rounds of hashing that you would like the function to go through, again, further enhancing the security of the hash that is produced.
+
 3. How are unit tests different from integration and end-to-end testing?
+
+Unit testing involves making sure that a specific code function works as intended in isolation from the rest of our program. This differs from integration testing where we test how different parts of the program work in unison, and also from end-to-end testing where we test an entire flow of an application or mock the way a user would interact with our platform. Unit tests are meant to be very focused, fast, and run often. They act as the base of our platform's testing landscape before introducing the broader scopes of testing. 
+
 4. How does _Test Driven Development_ change the way we write applications and tests?
+
+Test-Driven Development is unique in that it provides a blueprint of how we want pieces of our program to operate at a very low level. Therefore, before we write any project code, we know precisely what the outputs should be, keeping our work focused and non-tangential. When we implement enough code to make a test pass we are given instant feedback and the confidence to move forward with refactoring the code and adding new features, knowing that regressions will be caught by our tests. 
